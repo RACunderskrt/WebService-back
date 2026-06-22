@@ -5,22 +5,19 @@ import { CompanyService } from "../domain/services/CompanyService";
 import { CompanyController } from "../presentation/controllers/companyController";
 import { errorHandler } from "./errorHandling";
 import { AuthController } from '../presentation/controllers/authController';
-import { keycloak } from '../../keycloak-init';
-
+import { keycloak, memoryStore } from '../../keycloak-init';
 
 const app = express();
 app.use(express.json());
-const memoryStore = new session.MemoryStore();
-app.use(
-  session({
-    secret: 'some_secret_key',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
 
- app.use(keycloak.middleware());
+app.use(session({
+  secret: 'some_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  store: memoryStore,
+}));
+
+app.use(keycloak.middleware());
 
 const companyRepo = new CompanyRepositoryAdapter();
 const companyService = new CompanyService(companyRepo);
