@@ -43,6 +43,19 @@ export class AuthController {
 
       const { tokens } = await this.oauth2Client.getToken(code);
 
+      this.oauth2Client.setCredentials(tokens);
+
+      const response = await fetch(
+        "https://openidconnect.googleapis.com/v1/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${tokens.access_token}`,
+          },
+        }
+      );
+
+      const userInfo = await response.json();
+
       if (!tokens.id_token) {
         return res.status(400).json({
           success: false,
@@ -64,12 +77,23 @@ export class AuthController {
         });
       }
 
-      return res.json({
-        success: true,
-        firstName: payload.given_name,
-        lastName: payload.family_name,
-        email: payload.email,
-      });
+      return res.send(`
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <script>
+              window.opener.postMessage(
+                {
+                  name: ${JSON.stringify(userInfo.name)},
+                  email: ${JSON.stringify(userInfo.email)}
+                },
+                "http://localhost:5173"
+              );
+              window.close();
+            <\/script>
+          </body>
+        </html>
+      `);
     } catch (error) {
       console.error("Google OAuth error:", error);
 
