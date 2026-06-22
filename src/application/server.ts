@@ -1,10 +1,11 @@
 import express from 'express';
-
+import session from 'express-session';
 import { CompanyRepositoryAdapter } from "../infrastructure/adapters/companyRepositoryAdapter";
 import { CompanyService } from "../domain/services/CompanyService";
 import { CompanyController } from "../presentation/controllers/companyController";
 import { errorHandler } from "./errorHandling";
 import { AuthController } from '../presentation/controllers/authController';
+import { keycloak } from '../../keycloak-init';
 
 
 const app = express();
@@ -19,6 +20,16 @@ const authController = new AuthController();
 authController.registerRoutes(app);
 
 app.use(errorHandler);
+
+const memoryStore = new session.MemoryStore();
+app.use(
+  session({
+    secret: 'some_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    store: memoryStore,
+  })
+);
 
 const port = 3000;
 app.listen(port, () => {

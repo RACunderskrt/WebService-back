@@ -1,13 +1,13 @@
+import { keycloak } from "../../../keycloak-init";
 import { CompanyServicePort } from "../../application/ports/inbound/CompanyServicePort";
 import { Express, Response, Request } from "express";
 
-import {Company} from "../../domain/models/Company";
 
 export class CompanyController {
   constructor(private companyService: CompanyServicePort) {}
 
   registerRoutes(app: Express) {
-    app.get('/company/:id', this.getCompanyById.bind(this));
+    app.get('/company/:id', keycloak.protect(), this.getCompanyById.bind(this));
   }
 
   getCompanyById(req: Request, res: Response) {
