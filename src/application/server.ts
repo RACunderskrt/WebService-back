@@ -4,6 +4,7 @@ import { CompanyRepositoryAdapter } from "../infrastructure/adapters/companyRepo
 import { CompanyService } from "../domain/services/CompanyService";
 import { CompanyController } from "../presentation/controllers/companyController";
 import { errorHandler } from "./errorHandling";
+import { AuthController } from '../presentation/controllers/authController';
 
 
 const app = express();
@@ -13,6 +14,9 @@ const companyRepo = new CompanyRepositoryAdapter();
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(companyService);
 companyController.registerRoutes(app);
+
+const authController = new AuthController();
+authController.registerRoutes(app);
 
 app.use(errorHandler);
 
