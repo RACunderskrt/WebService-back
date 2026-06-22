@@ -7,7 +7,7 @@ export class CompanyController {
   constructor(private companyService: CompanyServicePort) {}
 
   registerRoutes(app: Express) {
-    app.get('/company/:id', keycloak.protect(), this.getCompanyById.bind(this));
+    app.get('/company/:id', keycloak.protect({ bearerOnly: true }), this.getCompanyById.bind(this));
   }
 
   getCompanyById(req: Request, res: Response) {

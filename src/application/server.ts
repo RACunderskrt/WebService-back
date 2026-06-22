@@ -10,6 +10,17 @@ import { keycloak } from '../../keycloak-init';
 
 const app = express();
 app.use(express.json());
+const memoryStore = new session.MemoryStore();
+app.use(
+  session({
+    secret: 'some_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    store: memoryStore,
+  })
+);
+
+ app.use(keycloak.middleware());
 
 const companyRepo = new CompanyRepositoryAdapter();
 const companyService = new CompanyService(companyRepo);
@@ -20,16 +31,6 @@ const authController = new AuthController();
 authController.registerRoutes(app);
 
 app.use(errorHandler);
-
-const memoryStore = new session.MemoryStore();
-app.use(
-  session({
-    secret: 'some_secret_key',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
 
 const port = 3000;
 app.listen(port, () => {
