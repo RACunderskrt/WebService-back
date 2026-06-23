@@ -3,3 +3,4 @@ package-lock.json
 credentials.json
 keycloak.json
 Dockerfile.keycloak
+/dist
