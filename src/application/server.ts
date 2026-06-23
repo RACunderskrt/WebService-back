@@ -12,6 +12,7 @@ import { FlightController } from '../presentation/controllers/flightController';
 import { SeatRepositoryAdapter } from '../infrastructure/adapters/seatRepositoryAdapter';
 import { SeatService } from '../domain/services/SeatService';
 import { SeatController } from '../presentation/controllers/seatController';
+import cors from 'cors'
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,12 @@ app.use(session({
 }));
 
 app.use(keycloak.middleware());
+
+app.use(cors({
+  origin: 'http://localhost:5173',  // your Vue dev server
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+}))
 
 const companyRepo = new CompanyRepositoryAdapter();
 const companyService = new CompanyService(companyRepo);
