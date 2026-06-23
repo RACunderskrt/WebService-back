@@ -3,18 +3,18 @@ import session from 'express-session';
 import * as fs from "node:fs";
 import * as YAML from 'yaml';
 import swaggerUi from 'swagger-ui-express';
-import { CompanyRepositoryAdapter } from "../infrastructure/adapters/companyRepositoryAdapter";
-import { CompanyService } from "../domain/services/CompanyService";
-import { CompanyController } from "../presentation/controllers/companyController";
-import { errorHandler } from "./errorHandling";
-import { AuthController } from '../presentation/controllers/authController';
-import { keycloak, memoryStore } from '../../keycloak-init';
-import { FlightRepositoryAdapter } from '../infrastructure/adapters/flightRepositoryAdapter';
-import { FlightService } from '../domain/services/FlightService';
-import { FlightController } from '../presentation/controllers/flightController';
-import { SeatRepositoryAdapter } from '../infrastructure/adapters/seatRepositoryAdapter';
-import { SeatService } from '../domain/services/SeatService';
-import { SeatController } from '../presentation/controllers/seatController';
+import { CompanyRepositoryAdapter } from "./src/infrastructure/adapters/companyRepositoryAdapter";
+import { CompanyService } from "./src/domain/services/CompanyService";
+import { CompanyController } from "./src/presentation/controllers/companyController";
+import { errorHandler } from "./src/application/errorHandling";
+import { AuthController } from './src/presentation/controllers/authController';
+import { keycloak, memoryStore } from './keycloak-init';
+import { FlightRepositoryAdapter } from './src/infrastructure/adapters/flightRepositoryAdapter';
+import { FlightService } from './src/domain/services/FlightService';
+import { FlightController } from './src/presentation/controllers/flightController';
+import { SeatRepositoryAdapter } from './src/infrastructure/adapters/seatRepositoryAdapter';
+import { SeatService } from './src/domain/services/SeatService';
+import { SeatController } from './src/presentation/controllers/seatController';
 import cors from 'cors'
 
 const app = express();
@@ -35,7 +35,7 @@ app.use(session({
 
 app.use(keycloak.middleware());
 
-const file  = fs.readFileSync(require.resolve('../api/airboard.yaml'), 'utf8')
+const file  = fs.readFileSync(require.resolve('./src/api/airboard.yaml'), 'utf8')
 const swaggerDocument = YAML.parse(file)
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
