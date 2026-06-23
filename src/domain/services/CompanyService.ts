@@ -13,4 +13,8 @@ export class CompanyService implements CompanyServicePort {
     }
     return company;
   }
+
+  getAll(): Company[] {
+    return this.repo.findAll();
+  }
 }

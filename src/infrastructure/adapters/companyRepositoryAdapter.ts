@@ -11,4 +11,8 @@ export class CompanyRepositoryAdapter implements CompanyRepositoryPort {
   find(id:number): Company | undefined {
     return this.companies.find((item) => item.id === id);
   }
+
+  findAll(): Company[] {
+    return this.companies;
+  }
 }

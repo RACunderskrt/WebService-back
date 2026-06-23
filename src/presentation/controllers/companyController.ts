@@ -8,11 +8,22 @@ export class CompanyController {
 
   registerRoutes(app: Express) {
     app.get('/company/:id', keycloak.protect({ bearerOnly: true }), this.getCompanyById.bind(this));
+    app.get('/company', keycloak.protect({ bearerOnly: true }), this.getAllCompany.bind(this));
   }
 
   getCompanyById(req: Request, res: Response) {
     const id: number = parseInt(req.params.id);
     const company = this.companyService.get(id);
+    if (company) {
+      res.status(200).send(company);
+    } else {
+      res.status(404).send({ message: "Company not found" });
+    }
+  }
+
+  getAllCompany(req: Request, res: Response) {
+    const id: number = parseInt(req.params.id);
+    const company = this.companyService.getAll();
     if (company) {
       res.status(200).send(company);
     } else {
