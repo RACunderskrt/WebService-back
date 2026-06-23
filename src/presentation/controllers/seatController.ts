@@ -9,9 +9,9 @@ export class SeatController {
   constructor(private seatService: SeatServicePort) {}
 
   registerRoutes(app: Express) {
-    app.get('/seat',keycloak.protect({ bearerOnly: true }), this.getSeats.bind(this)); 
-    app.post('/seat', keycloak.protect({ bearerOnly: true }), this.bookSeat.bind(this)); 
-    app.delete('/seat/:id', keycloak.protect({ bearerOnly: true }), this.unbookSeat.bind(this));
+    app.get('/seat',keycloak.protect({ bearerOnly: true } as any), this.getSeats.bind(this)); 
+    app.put('/seat', keycloak.protect({ bearerOnly: true } as any), this.bookSeat.bind(this)); 
+    app.delete('/seat/:id', keycloak.protect({ bearerOnly: true } as any), this.unbookSeat.bind(this));
   }
 
   getSeats(req: Request, res: Response) {
@@ -29,7 +29,7 @@ export class SeatController {
       this.seatService.bookSeat(bookedSeat);
       res.sendStatus(200);
     }catch(e){
-      res.status(404).send({ message: "Error : invalid body" });
+      res.status(400).send({ message: "Error : invalid body" });
     }
   }
 
@@ -39,7 +39,7 @@ export class SeatController {
       this.seatService.unbookSeat(id);
       res.sendStatus(200);
     }catch(e){
-      res.status(405).send({ message: "Error : invalid id" });
+      res.status(400).send({ message: "Error : invalid id" });
     }
   }
 }

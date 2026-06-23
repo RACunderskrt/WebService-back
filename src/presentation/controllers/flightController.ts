@@ -7,8 +7,8 @@ export class FlightController {
   constructor(private flightService: FlightServicePort) {}
 
   registerRoutes(app: Express) {
-    app.get('/flight',keycloak.protect({ bearerOnly: true }), this.getFlights.bind(this)); 
-    app.get('/flight/:id', keycloak.protect({ bearerOnly: true }), this.getFlightById.bind(this));
+    app.get('/flight',keycloak.protect({ bearerOnly: true } as any), this.getFlights.bind(this)); 
+    app.get('/flight/:id', keycloak.protect({ bearerOnly: true } as any), this.getFlightById.bind(this));
   }
 
   getFlights(req: Request, res: Response) {

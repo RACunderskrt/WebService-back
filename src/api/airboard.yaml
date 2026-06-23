@@ -1,0 +1,197 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: AirBoard api
+  license:
+    name: IMT
+servers:
+  - url: http://localhost:3000
+paths:
+  /company:
+    get:
+      summary: List all companies
+      operationId: getAllCompany
+      tags:
+        - company
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Company"
+  /company/{id}:
+    get:
+      summary: Returns a single company by id
+      operationId: getCompanyById
+      tags:
+        - company
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The company id
+          schema:
+            type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+  /flight:
+    get:
+      summary: List all flights
+      operationId: getFlights
+      tags:
+        - flight
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Flight"
+  /flight/{id}:
+    get:
+      summary:  Returns a single flight by id
+      operationId: getFlightById
+      tags:
+        - flight
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The flight id
+          schema:
+            type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Flight"
+        '404':
+          description: Forest was not found
+  /seat:
+    get:
+      summary: Get all seats
+      operationId: getSeats
+      tags:
+        - sear
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Seat"
+    put:
+      summary: Book a seat 
+      operationId: bookSeat
+      tags:
+        - seat
+      responses:
+        '200':
+          description: Only sends success code if updated
+        '400':
+          description: "Error : invalid body"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Seat"
+        description: Seat to book
+  /seat/{id}:
+    delete:
+      summary: Unbooks a seat
+      operationId: unbookSeat
+      tags:
+        - seat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The seat id
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Only sends success code if updated
+        '400':
+          description: "Error : invalid body"
+components:
+  schemas:
+    Company:
+      required:
+        - id
+        - name
+        - address
+        - postalCode
+        - city
+        - email
+        - phone
+      properties:
+        id:
+          type: number
+          format: integer
+        name:
+          type: string
+        address:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+    Flight:
+      required:
+        - id
+        - companyId
+        - departureAirport 
+        - departureDate
+        - arrivalAirport 
+        - arrivalDate
+      properties:
+        id:
+          type: number
+          format: integer
+        companyId:
+          type: number
+          format: integer
+        departureAirport:
+          type: string
+        departureDate:
+          type: string
+          format: date
+        arrivalAirport:
+          type: string
+        arrivalDate:
+          type: string
+          format: date
+    Seat:
+      required:
+        - id
+        - flightId
+        - label 
+        - clientName
+        - clientFirstname 
+      properties:
+        id:
+          type: number
+          format: integer
+        flightId:
+          type: number
+          format: integer
+        label:
+          type: string
+        clientName:
+          type: string | null
+        clientFirstname:
+          type: string | null

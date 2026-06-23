@@ -1,5 +1,8 @@
 import express from 'express';
 import session from 'express-session';
+import * as fs from "node:fs";
+import * as YAML from 'yaml';
+import swaggerUi from 'swagger-ui-express';
 import { CompanyRepositoryAdapter } from "../infrastructure/adapters/companyRepositoryAdapter";
 import { CompanyService } from "../domain/services/CompanyService";
 import { CompanyController } from "../presentation/controllers/companyController";
@@ -32,6 +35,10 @@ app.use(session({
 
 app.use(keycloak.middleware());
 
+const file  = fs.readFileSync(require.resolve('../api/airboard.yaml'), 'utf8')
+const swaggerDocument = YAML.parse(file)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 const companyRepo = new CompanyRepositoryAdapter();
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(companyService);
@@ -55,4 +62,5 @@ app.use(errorHandler);
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
+  console.log(`Swagger docs at http://localhost:${port}/docs`);
 });
