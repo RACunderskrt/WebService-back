@@ -9,8 +9,7 @@ RUN npm ci
 
 COPY . .
 
-# Uncomment if you have a build step (e.g. TypeScript compilation)
-# RUN npm run build
+RUN npm run build
 
 # ─── Stage 2: Production image ────────────────────────────────────────────────
 FROM node:22-alpine AS production
@@ -22,9 +21,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev
 
-# Copy app source (or compiled output if you have a build step)
-COPY --from=builder /app .
+# Copy compiled output from builder
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["node", "dist/server.js"]
