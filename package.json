@@ -16,7 +16,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only server.ts",
-    "build": "rm -rf dist/ && tsc -p tsconfig.json && cp ./src/api/airboard.yaml dist/ && cp keycloak.json dist/ && cp credentials.json dist/",
+    "build": "rm -rf dist/ && tsc -p tsconfig.json && cp -r ./src/api dist/src/ && cp keycloak.json dist/ && cp credentials.json dist/",
     "start": "node dist/server.js"
   },
   "dependencies": {
