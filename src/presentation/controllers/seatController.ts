@@ -27,7 +27,7 @@ export class SeatController {
     try{
       const bookedSeat: Seat = req.body;
       this.seatService.bookSeat(bookedSeat);
-      res.status(200).send(bookedSeat);
+      res.sendStatus(200);
     }catch(e){
       res.status(404).send({ message: "Error : invalid body" });
     }
