@@ -6,6 +6,12 @@ import { CompanyController } from "../presentation/controllers/companyController
 import { errorHandler } from "./errorHandling";
 import { AuthController } from '../presentation/controllers/authController';
 import { keycloak, memoryStore } from '../../keycloak-init';
+import { FlightRepositoryAdapter } from '../infrastructure/adapters/flightRepositoryAdapter';
+import { FlightService } from '../domain/services/FlightService';
+import { FlightController } from '../presentation/controllers/flightController';
+import { SeatRepositoryAdapter } from '../infrastructure/adapters/seatRepositoryAdapter';
+import { SeatService } from '../domain/services/SeatService';
+import { SeatController } from '../presentation/controllers/seatController';
 
 const app = express();
 app.use(express.json());
@@ -23,6 +29,16 @@ const companyRepo = new CompanyRepositoryAdapter();
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(companyService);
 companyController.registerRoutes(app);
+
+const flightRepo = new FlightRepositoryAdapter();
+const flightService = new FlightService(flightRepo);
+const flightController = new FlightController(flightService);
+flightController.registerRoutes(app);
+
+const seatRepo = new SeatRepositoryAdapter();
+const seatService = new SeatService(seatRepo);
+const seatController = new SeatController(seatService);
+seatController.registerRoutes(app);
 
 const authController = new AuthController();
 authController.registerRoutes(app);

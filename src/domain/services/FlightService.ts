@@ -8,7 +8,7 @@ export class FlightService implements FlightServicePort {
   constructor(private readonly repo: FlightRepositoryPort) {}
 
   getAll(): Flight[]{
-    return []
+    return this.repo.findAll();
   }
 
   get(id: number): Flight | undefined {
