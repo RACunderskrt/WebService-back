@@ -37,9 +37,9 @@ export class SeatController {
     try{
       const id: number = parseInt(req.params.id);
       this.seatService.unbookSeat(id);
-      res.status(200).send(id);
+      res.sendStatus(200);
     }catch(e){
-      res.status(404).send({ message: "Error : invalid id" });
+      res.status(405).send({ message: "Error : invalid id" });
     }
   }
 }
